@@ -10,28 +10,28 @@ namespace Smile_IQ_api.Controller
     [ApiController]
     public class SmileScansController : ControllerBase
     {
-        private readonly ISmileScanService _service;
+        private readonly ISmileScanService _smileService;
 
         public SmileScansController(ISmileScanService service)
         {
-            _service = service;
+            _smileService = service;
         }
 
         [EnableRateLimiting("SmilePolicy")]
         [HttpPost]
         [RequestSizeLimit(5_000_000)]
-        public async Task<IActionResult> Create ([FromForm] DTOCreateSmileScanRequest request)
+        public async Task<IActionResult> UploadSmileImage ([FromForm] DTOCreateSmileScanRequest scanRequest)
         {
-            if (request == null)
-                throw new ArgumentException("Request cannot be null.");
+            if (scanRequest is null)
+                return BadRequest("The request cannot be null.");
 
-            if (request.ExternalPatientId <= 0)
-                throw new ArgumentException("ExternalPatientId must be greater than 0.");
+            if (scanRequest.ExternalPatientId <= 0)
+                return BadRequest("ExternalPatientId must be a positive number.");
 
-            if (request.Image == null || request.Image.Length == 0)
-                throw new ArgumentException("Image is required.");
+            if (scanRequest.Image is null || scanRequest.Image.Length == 0)
+                return BadRequest("An image file is required.");
 
-            var result = await _service.CreateAsync(request);
+            var result = await _smileService.UploadSmileImageAsync(scanRequest);
 
             return Ok(result);
         }
@@ -39,7 +39,7 @@ namespace Smile_IQ_api.Controller
         [HttpGet("{externalPatientId}")]
         public async Task<IActionResult> GetByPatient(int externalPatientId)
         {
-            var result = await _service.GetByExternalPatientIdAsync(externalPatientId);
+            var result = await _smileService.GetByExternalPatientIdAsync(externalPatientId);
             return Ok(result);
         }
     }

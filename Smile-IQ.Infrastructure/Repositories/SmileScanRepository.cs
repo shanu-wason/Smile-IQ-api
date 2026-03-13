@@ -12,26 +12,26 @@ namespace Smile_IQ.Infrastructure.Repositories
 {
     public class SmileScanRepository : ISmileScanRepository
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _dbContext;
 
         public SmileScanRepository(AppDbContext context)
         {
-            _context = context;
+            _dbContext = context;
         }
 
         public async Task AddAsync(SmileScan scan)
         {
-            await _context.SmileScans.AddAsync(scan);
+            await _dbContext.SmileScans.AddAsync(scan);
         }
 
-        public Task<DTOSmileScanResponse> CreateAsync(DTOCreateSmileScanRequest request)
+        public Task<DTOSmileScanResponse> UploadSmileImageAsync(DTOCreateSmileScanRequest request)
         {
             throw new NotImplementedException();
         }
 
         public async Task<List<SmileScan>> GetByExternalPatientIdAsync(int externalPatientId)
         {
-            return await _context.SmileScans
+            return await _dbContext.SmileScans
                 .Where(x => x.ExternalPatientId == externalPatientId)
                 .OrderByDescending(x => x.CreatedAt)
                 .ToListAsync();
@@ -39,7 +39,7 @@ namespace Smile_IQ.Infrastructure.Repositories
 
         public async Task SaveChangesAsync()
         {
-            await _context.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

@@ -11,20 +11,20 @@ namespace Smile_IQ.Application.Services
 {
     public class SmileScanService : ISmileScanService
     {
-        private readonly ISmileScanRepository _repository;
-        private readonly SmileScoreCalculator _calculator;
+        private readonly ISmileScanRepository _smileRepository;
+        private readonly SmileScoreCalculator _scoreCalculator;
         private readonly IOpenAIService _openAIService;
         private readonly SupabaseStorageService _storageService;
 
         public SmileScanService(ISmileScanRepository repository, SmileScoreCalculator calculator, IOpenAIService openAIService, SupabaseStorageService storageService)
         {
-            _repository = repository;
-            _calculator = calculator;
+            _smileRepository = repository;
+            _scoreCalculator = calculator;
             _openAIService = openAIService;
             _storageService = storageService;
         }
 
-        public async Task<DTOSmileScanResponse> CreateAsync(DTOCreateSmileScanRequest request)
+        public async Task<DTOSmileScanResponse> UploadSmileImageAsync(DTOCreateSmileScanRequest request)
         {
             byte[] imageBytes;
             using (var ms = new MemoryStream())
@@ -37,7 +37,7 @@ namespace Smile_IQ.Application.Services
             var imageUrl = await _storageService.UploadAsync(imageBytes, request.Image.FileName);
             var analysis = await _openAIService.AnalyzeSmileAsync(imageBytes, mimeType);
 
-            var scoreResult = _calculator.Calculate(
+            var scoreResult = _scoreCalculator.Calculate(
                 analysis.AlignmentScore,
                 analysis.GumHealthScore,
                 analysis.WhitenessScore,
@@ -58,8 +58,8 @@ namespace Smile_IQ.Application.Services
                 CreatedAt = DateTime.UtcNow
             };
 
-            await _repository.AddAsync(scan);
-            await _repository.SaveChangesAsync();
+            await _smileRepository.AddAsync(scan);
+            await _smileRepository.SaveChangesAsync();
 
             return new DTOSmileScanResponse
             {
@@ -76,7 +76,7 @@ namespace Smile_IQ.Application.Services
 
         public async Task<List<DTOSmileScanResponse>> GetByExternalPatientIdAsync(int externalPatientId)
         {
-            var scans = await _repository.GetByExternalPatientIdAsync(externalPatientId);
+            var scans = await _smileRepository.GetByExternalPatientIdAsync(externalPatientId);
 
             return scans.Select(scan => new DTOSmileScanResponse
             {

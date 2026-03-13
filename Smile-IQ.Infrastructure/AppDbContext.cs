@@ -13,7 +13,6 @@ namespace Smile_IQ.Infrastructure
         public AppDbContext(DbContextOptions<AppDbContext> dbContextOptions) : base(dbContextOptions)
         {
         }
-
         public DbSet<SmileScan> SmileScans { get; set; }
 
         public DbSet<AIUsageLog> AIUsageLog { get; set; }
