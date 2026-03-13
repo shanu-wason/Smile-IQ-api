@@ -74,5 +74,7 @@ app.UseCors("AllowAll");
 app.UseRateLimiter();
 app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseAuthorization();
+
 app.MapControllers();
+
 app.Run();
