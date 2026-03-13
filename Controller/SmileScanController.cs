@@ -32,12 +32,11 @@ namespace Smile_IQ_api.Controller
                 return BadRequest("An image file is required.");
 
             var result = await _smileService.UploadSmileImageAsync(scanRequest);
-
             return Ok(result);
         }
 
         [HttpGet("{externalPatientId}")]
-        public async Task<IActionResult> GetByPatient(int externalPatientId)
+        public async Task<IActionResult> GetPatientSmile (int externalPatientId)
         {
             var result = await _smileService.GetByExternalPatientIdAsync(externalPatientId);
             return Ok(result);
