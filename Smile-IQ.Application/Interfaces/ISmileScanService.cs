@@ -9,7 +9,7 @@ namespace Smile_IQ.Application.Interfaces
 {
     public interface ISmileScanService
     {
-        Task<DTOSmileScanResponse> UploadSmileImageAsync(DTOCreateSmileScanRequest request);
+        Task<DTOSmileScanResponse> CreateAsync(DTOCreateSmileScanRequest request);
         Task<List<DTOSmileScanResponse>> GetByExternalPatientIdAsync(int externalPatientId);
     }
 }

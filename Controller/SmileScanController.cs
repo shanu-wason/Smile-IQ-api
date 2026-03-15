@@ -19,19 +19,20 @@ namespace Smile_IQ_api.Controller
 
         [EnableRateLimiting("SmilePolicy")]
         [HttpPost]
-        [RequestSizeLimit(10_000_000)]
-        public async Task<IActionResult> UploadSmileImage ([FromForm] DTOCreateSmileScanRequest scanRequest)
+        [RequestSizeLimit(5_000_000)]
+        public async Task<IActionResult> Create([FromForm] DTOCreateSmileScanRequest request)
         {
-            if (scanRequest is null)
-                return BadRequest("The request cannot be null.");
+            if (request == null)
+                throw new ArgumentException("Request cannot be null.");
 
-            if (scanRequest.ExternalPatientId <= 0)
-                return BadRequest("ExternalPatientId must be a positive number.");
+            if (request.ExternalPatientId <= 0)
+                throw new ArgumentException("ExternalPatientId must be greater than 0.");
 
-            if (scanRequest.Image is null || scanRequest.Image.Length == 0)
-                return BadRequest("An image file is required.");
+            if (request.Image == null || request.Image.Length == 0)
+                throw new ArgumentException("Image is required.");
 
-            var result = await _smileService.UploadSmileImageAsync(scanRequest);
+            var result = await _smileService.CreateAsync(request);
+
             return Ok(result);
         }
 

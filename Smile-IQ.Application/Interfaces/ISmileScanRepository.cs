@@ -12,7 +12,7 @@ namespace Smile_IQ.Application.Interfaces
     {
         Task AddAsync(SmileScan scan);
         Task<List<SmileScan>> GetByExternalPatientIdAsync(int externalPatientId);
-        Task<DTOSmileScanResponse> UploadSmileImageAsync(DTOCreateSmileScanRequest request);
+        Task<DTOSmileScanResponse> CreateAsync(DTOCreateSmileScanRequest request);
         Task SaveChangesAsync();
     }
 }

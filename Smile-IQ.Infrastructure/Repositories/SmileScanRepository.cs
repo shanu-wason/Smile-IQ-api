@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Polly;
 using Smile_IQ.Application.DTOs;
 using Smile_IQ.Application.Interfaces;
 using Smile_IQ.Domain.Entities;
@@ -24,7 +25,7 @@ namespace Smile_IQ.Infrastructure.Repositories
             await _dbContext.SmileScans.AddAsync(scan);
         }
 
-        public Task<DTOSmileScanResponse> UploadSmileImageAsync(DTOCreateSmileScanRequest request)
+        public Task<DTOSmileScanResponse> CreateAsync(DTOCreateSmileScanRequest request)
         {
             throw new NotImplementedException();
         }
