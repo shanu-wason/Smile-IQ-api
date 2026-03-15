@@ -20,14 +20,8 @@ namespace Smile_IQ.Infrastructure.AI
     {
         private readonly IConfiguration _configuration;
         private readonly AppDbContext _dbContext;
-        private readonly AsyncRetryPolicy _retryPolicy =
-                            Policy
-                                .Handle<Exception>()
-                                .WaitAndRetryAsync(
-                                    2,
-                                    retryAttempt => TimeSpan.FromSeconds(2));
-        private readonly AsyncPolicy _timeoutPolicy =
-                            Policy.TimeoutAsync(TimeSpan.FromSeconds(15));
+        private readonly AsyncRetryPolicy _retryPolicy = Policy.Handle<Exception>().WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(2));
+        private readonly AsyncPolicy _timeoutPolicy = Policy.TimeoutAsync(TimeSpan.FromSeconds(15));
 
         public OpenAIService(IConfiguration configuration, AppDbContext dbContext)
         {

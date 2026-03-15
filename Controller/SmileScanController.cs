@@ -6,7 +6,7 @@ using Smile_IQ.Application.Interfaces;
 
 namespace Smile_IQ_api.Controller
 {
-    [Route("api/[controller]")]
+    [Route("api/smile-scans")]
     [ApiController]
     public class SmileScansController : ControllerBase
     {
@@ -19,7 +19,7 @@ namespace Smile_IQ_api.Controller
 
         [EnableRateLimiting("SmilePolicy")]
         [HttpPost]
-        [RequestSizeLimit(5_000_000)]
+        [RequestSizeLimit(10_000_000)]
         public async Task<IActionResult> UploadSmileImage ([FromForm] DTOCreateSmileScanRequest scanRequest)
         {
             if (scanRequest is null)
