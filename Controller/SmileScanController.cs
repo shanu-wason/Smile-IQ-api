@@ -1,13 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.Mvc;
 using Smile_IQ.Application.DTOs;
 using Smile_IQ.Application.Interfaces;
 
 namespace Smile_IQ_api.Controller
 {
-    [Route("api/smile-scans")]
     [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/smile-scans")]
     public class SmileScansController : ControllerBase
     {
         private readonly ISmileScanService _smileService;

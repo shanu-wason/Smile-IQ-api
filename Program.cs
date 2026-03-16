@@ -31,6 +31,17 @@ builder.Services.Configure<FormOptions>(options =>
 });
 
 builder.Services.AddControllers();
+
+// API Versioning
+builder.Services.AddApiVersioning(options =>
+{
+    // Report supported versions in response headers
+    options.ReportApiVersions = true;
+
+    // Assume default version when it's not specified
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddCors(options =>
 {
