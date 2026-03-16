@@ -9,28 +9,17 @@ namespace Smile_IQ.Application.Services
     public class SupabaseStorageService
     {
         private readonly Client _client;
-        public ILogger<SupabaseStorageService> logger { get; set; }
-
-        public SupabaseStorageService(IConfiguration config)
+        private readonly ILogger<SupabaseStorageService> _logger;
+        public SupabaseStorageService(IConfiguration config, ILogger<SupabaseStorageService> logger)
         {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             var url = config["Supabase:Url"];
             var key = config["Supabase:Key"];
-
-            if (!string.IsNullOrEmpty(url) && url.StartsWith("file:", StringComparison.OrdinalIgnoreCase))
-            {
-                var path = url.Substring("file:".Length);
-                url = File.ReadAllText(path).Trim();
-            }
-
-            if (!string.IsNullOrEmpty(key) && key.StartsWith("file:", StringComparison.OrdinalIgnoreCase))
-            {
-                var path = key.Substring("file:".Length);
-                key = File.ReadAllText(path).Trim();
-            }
-
+            // (Optional) log url/key prefix here using _logger
             _client = new Client(url, key);
             _client.InitializeAsync().Wait();
         }
+
         //public async Task<string> UploadAsync(byte[] fileBytes, string originalFileName)
         //{
         //        var bucketName = "smile-image-bucket";
@@ -45,7 +34,7 @@ namespace Smile_IQ.Application.Services
 
         public async Task<string> UploadAsync(byte[] fileBytes, string originalFileName)
         {
-            logger.LogInformation($"client info from upload image: {_client}");
+            _logger.LogInformation($"client info from upload image: {_client}");
             var bucket = "smile-image-bucket";
             var fileName = $"{Guid.NewGuid()}_{originalFileName}";
             await _client.Storage.From(bucket).Upload(fileBytes, fileName);
