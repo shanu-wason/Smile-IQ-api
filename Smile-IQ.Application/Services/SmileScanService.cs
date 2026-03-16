@@ -24,7 +24,7 @@ namespace Smile_IQ.Application.Services
             _storageService = storageService;
         }
 
-        public async Task<DTOSmileScanResponse> CreateAsync(DTOCreateSmileScanRequest request)
+        public async Task<DTOSmileScanResponse> UploadSmileImageAsync(DTOCreateSmileScanRequest request)
         {
             byte[] imageBytes;
             using (var ms = new MemoryStream())
