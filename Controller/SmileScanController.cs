@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
-using Microsoft.AspNetCore.Mvc;
 using Smile_IQ.Application.DTOs;
 using Smile_IQ.Application.Interfaces;
 
@@ -9,7 +8,7 @@ namespace Smile_IQ_api.Controller
 {
     [ApiController]
     [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/smile-scans")]
+    [Route("api/v1/smile-scans")]
     public class SmileScansController : ControllerBase
     {
         private readonly ISmileScanService _smileService;
@@ -22,7 +21,7 @@ namespace Smile_IQ_api.Controller
         [EnableRateLimiting("SmilePolicy")]
         [HttpPost]
         [RequestSizeLimit(10_000_000)]
-        public async Task<IActionResult> UploadSmileImage ([FromForm] DTOCreateSmileScanRequest scanRequest)
+        public async Task<IActionResult> UploadSmileImage([FromForm] DTOCreateSmileScanRequest scanRequest)
         {
             if (scanRequest is null)
                 return BadRequest("The request cannot be null.");
@@ -38,10 +37,11 @@ namespace Smile_IQ_api.Controller
         }
 
         [HttpGet("{externalPatientId}")]
-        public async Task<IActionResult> GetPatientSmile (int externalPatientId)
+        public async Task<IActionResult> GetPatientSmile(int externalPatientId)
         {
             var result = await _smileService.GetByExternalPatientIdAsync(externalPatientId);
             return Ok(result);
         }
     }
 }
+

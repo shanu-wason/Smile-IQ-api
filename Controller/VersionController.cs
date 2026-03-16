@@ -5,7 +5,7 @@ namespace Smile_IQ_api.Controller
 {
     [ApiController]
     [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/version")]
+    [Route("api/v1/version")]
     public class VersionController : ControllerBase
     {
         [HttpGet]
@@ -27,4 +27,3 @@ namespace Smile_IQ_api.Controller
         }
     }
 }
-
