@@ -11,18 +11,24 @@ namespace Smile_IQ.Application.Services
         private readonly Client _client;
         public ILogger<SupabaseStorageService> logger { get; set; }
 
-        public SupabaseStorageService(IConfiguration config, ILogger<SupabaseStorageService> _logger)
+        public SupabaseStorageService(IConfiguration config)
         {
-            logger = _logger;
+            var url = config["Supabase:Url"];
+            var key = config["Supabase:Key"];
 
-            _client = new Client(
-                config["Supabase:Url"],
-                config["Supabase:Key"]
-            );
+            if (!string.IsNullOrEmpty(url) && url.StartsWith("file:", StringComparison.OrdinalIgnoreCase))
+            {
+                var path = url.Substring("file:".Length);
+                url = File.ReadAllText(path).Trim();
+            }
 
-            logger.LogInformation($"Supabase URL: {config["Supabase:Url"]}");
-            logger.LogInformation($"Supabase Key: {config["Supabase:Key"]}");
+            if (!string.IsNullOrEmpty(key) && key.StartsWith("file:", StringComparison.OrdinalIgnoreCase))
+            {
+                var path = key.Substring("file:".Length);
+                key = File.ReadAllText(path).Trim();
+            }
 
+            _client = new Client(url, key);
             _client.InitializeAsync().Wait();
         }
         //public async Task<string> UploadAsync(byte[] fileBytes, string originalFileName)
